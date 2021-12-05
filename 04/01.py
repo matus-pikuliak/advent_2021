@@ -1,30 +1,26 @@
-from collections import Counter
 from itertools import chain
 
-lines = [
-    list(map(int, line.replace(' -> ', ',').split(',')))
-    for line in open('input')
+lines = open('input').read().splitlines()
+
+o = lines[0].split(',')
+boards = [
+    [l.split() for l in b]
+    for b in zip(*[lines[i::6] for i in range(2, 7)])
 ]
 
 
-def points(line):
-    a, b, c, d = line
-    steps = abs(a - c) or abs(b - d)
-    dx = (2 * (a < c) - 1) * (a != c)
-    dy = (2 * (b < d) - 1) * (b != d)
-    return [
-        (a + i * dx, b + i * dy)
-        for i in range(steps + 1)
-    ]
+def score(board):
+    return min(score_rows(board), score_rows(list(zip(*board))))
+
+
+def score_rows(board):
+    steps = min(max(o.index(num) for num in row) for row in board)
+    score = sum(int(num) for num in chain(*board) if o.index(num) > steps) * int(o[steps])
+    return steps, score
+
 
 # Part 1
-counts = Counter(chain.from_iterable(
-    points(line)
-    for line in lines
-    if line[0] == line[2] or line[1] == line[3]
-))
-print(sum(v > 1 for v in counts.values()))
+print(min(map(score, boards)))
 
 # Part 2
-counts = Counter(chain.from_iterable(map(points, lines)))
-print(sum(v > 1 for v in counts.values()))
+print(max(map(score, boards)))
