@@ -21,9 +21,11 @@ def explode(octo, x):
 def step(x, c):
     for octo in x:
         x[octo] += 1
-    while (octo := next((o for o, val in x.items() if val > 9), None)) is not None:
-        c += explode(octo, x)
-    return x, c
+    try:
+        while True:
+            c += explode(next((o for o, val in x.items() if val > 9)), x)
+    except StopIteration:
+        return x, c
 
 
 for i in count():
