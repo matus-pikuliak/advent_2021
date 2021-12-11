@@ -13,7 +13,7 @@ def explode(octo, x):
     c = 1
     for i, j in product([1, 0, -1], repeat=2):
         if (n := octo + i + 1j * j) in x:
-            x[n] += 1 * (x[n] > 0)
+            x[n] += x[n] > 0
             c += x[n] > 9 and explode(n, x)
     return c
 
