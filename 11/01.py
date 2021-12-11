@@ -23,7 +23,7 @@ def step(x, c):
         x[octo] += 1
     try:
         while True:
-            c += explode(next((o for o, val in x.items() if val > 9)), x)
+            c += explode(next(o for o, val in x.items() if val > 9), x)
     except StopIteration:
         return x, c
 
