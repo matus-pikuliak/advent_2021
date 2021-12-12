@@ -8,7 +8,7 @@ p1, p2 = 0, set()
 for line in open('input').read().splitlines():
     while len(line) > len(line := line.replace('<>', '').replace('[]', '').replace('{}', '').replace('()', '')): pass
     try:
-        bracket = line[min(line.index(w) for w in wrong if w in line) + 1]
+        bracket = line[min(line.index(w) for w in r if w in line)]
         p1 += [3, 57, 1197, 25137][r.index(bracket)]
     except ValueError:
         p2.add(sum((l.index(c) + 1) * 5 ** i for i, c in enumerate(line)))
