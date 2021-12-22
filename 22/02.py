@@ -1,35 +1,31 @@
 import re
 from functools import partial
 
-lights = list()
+lights = set()
 
 
-def add(coord):
-    for l in lights:
-        if overlap(l, coord):
-            for part in minus(coord, l):
-                add(part)
-            return
-    lights.append(coord)
+def add(coord, overlapping=None):
+    overlapping = list(filter(partial(overlap, coord), overlapping or lights))
+    for l in overlapping:
+        for part in minus(coord, l):
+            add(part, overlapping)
+        return
+    lights.add(coord)
 
 
 def remove(coord):
     overlapping = list(filter(partial(overlap, coord), lights))
     for l in overlapping:
         lights.remove(l)
-        lights.extend(minus(l, coord))
+        lights.__ior__(set(minus(l, coord)))
 
 
 def overlap(l1, l2):
-    def overlap_1d(x1, x2, y1, y2):
-        return x2 >= y1 and x1 <= y2
-
-    return overlap_1d(l1[0], l1[1], l2[0], l2[1]) and overlap_1d(l1[2], l1[3], l2[2], l2[3]) and overlap_1d(l1[4], l1[5], l2[4], l2[5])
+    return l1[1] >= l2[0] and l1[0] <= l2[1] and l1[3] >= l2[2] and l1[2] <= l2[3] and l1[5] >= l2[4] and l1[4] <= l2[5]
 
 
 def minus(l1, l2):
     l1 = list(l1)
-    l2 = list(l2)
     if l1[0] < l2[0]:
         yield l1[0], l2[0]-1, l1[2], l1[3], l1[4], l1[5]
         l1[0] = l2[0]
@@ -65,6 +61,3 @@ print(sum(
     (l[1] - l[0] + 1) * (l[3] - l[2] + 1) * (l[5] - l[4] + 1)
     for l in lights
 ))
-
-
-
