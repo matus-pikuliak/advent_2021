@@ -30,27 +30,21 @@ def overlap(l1, l2):
 def minus(l1, l2):
     l1 = list(l1)
     l2 = list(l2)
-    # top
     if l1[0] < l2[0]:
         yield l1[0], l2[0]-1, l1[2], l1[3], l1[4], l1[5]
         l1[0] = l2[0]
-    # bottom
     if l1[1] > l2[1]:
         yield l2[1]+1, l1[1], l1[2], l1[3], l1[4], l1[5]
         l1[1] = l2[1]
-    # left
     if l1[2] < l2[2]:
         yield l1[0], l1[1], l1[2], l2[2]-1, l1[4], l1[5]
         l1[2] = l2[2]
-    # right
     if l1[3] > l2[3]:
         yield l1[0], l1[1], l2[3]+1, l1[3], l1[4], l1[5]
         l1[3] = l2[3]
-    # left
     if l1[4] < l2[4]:
         yield l1[0], l1[1], l1[2], l1[3], l1[4], l2[4]-1
         l1[4] = l2[4]
-    # right
     if l1[5] > l2[5]:
         yield l1[0], l1[1], l1[2], l1[3], l2[5]+1, l1[5]
 
